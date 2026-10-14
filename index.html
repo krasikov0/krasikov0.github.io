@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nikolay Krasikov</title>
+<meta name="description" content="Nikolay Krasikov — vibe coder. Websites, AI agents and automation for business.">
+<meta property="og:title" content="Nikolay Krasikov — vibe coder">
+<meta property="og:description" content="Websites, AI agents and automation for business.">
+<meta property="og:image" content="assets/img/me-2.webp">
+<meta name="theme-color" content="#f2f0ed">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='32' fill='%230c0c0c'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='Georgia,serif' font-weight='700' font-size='28' fill='%23f2f0ed'%3Enk.%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,800;0,900;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/img/me-2.webp">
+<style>
+:root{
+  --bg:#f2f0ed;
+  --ink:#0c0c0c;
+  --muted:#9b9893;
+  --ghost:#e7e4df;
+  --line:#dcd8d2;
+  --night:#0b0b0b;
+  --paper:#ffffff;
+
+  --serif:"Playfair Display", "Times New Roman", serif;
+  --sans:"Inter", -apple-system, system-ui, sans-serif;
+
+  --gx:7.4vw;               /* side gutter, as in the reference */
+  --strip:18.5vh;           /* bottom black strip */
+  --more:22.4vw;            /* "more" block width */
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+body{background:var(--bg);color:var(--ink);font:500 14px/1.5 var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img,video{display:block;max-width:100%}
+::selection{background:var(--ink);color:var(--bg)}
+:focus-visible{outline:1.5px solid var(--ink);outline-offset:4px;border-radius:4px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (hover:hover) and (pointer:fine){ body.has-cursor, body.has-cursor *{cursor:none!important} }
+
+/* ---------- split text ---------- */
+.line{display:block;overflow:hidden;padding-bottom:.06em;margin-bottom:-.06em}
+.ch{display:inline-block;will-change:transform}
+
+/* ---------- preloader ---------- */
+.loader{position:fixed;inset:0;z-index:90;background:var(--bg);display:grid;place-items:center}
+.loader__logo{font:900 clamp(3rem,7vw,6rem)/1 var(--serif);letter-spacing:-.02em}
+.loader__logo .line{padding-bottom:.1em}
+.loader__count{position:absolute;right:var(--gx);bottom:6vh;font:400 clamp(2.5rem,6vw,5rem)/1 var(--serif);font-variant-numeric:tabular-nums}
+.loader__bar{position:absolute;left:var(--gx);right:var(--gx);bottom:4vh;height:1px;background:var(--line);overflow:hidden}
+.loader__bar i{position:absolute;inset:0;background:var(--ink);transform-origin:left;transform:scaleX(0)}
+
+/* ---------- header ---------- */
+.top{position:fixed;z-index:30;top:0;left:0;right:0;height:15vh;display:flex;align-items:center;justify-content:space-between;padding:0 calc(var(--gx) * .55) 0 var(--gx);pointer-events:none}
+.top > *{pointer-events:auto}
+.logo{display:flex;align-items:center;height:clamp(38px,3.6vw,48px);font:900 clamp(1.25rem,1.6vw,1.6rem)/1 var(--serif);letter-spacing:-.01em}
+.logo span{display:block;translate:0 -.12em}
+.top__right{display:flex;align-items:center;gap:.75rem}
+.talk{display:flex;align-items:center;gap:.9rem;font-size:12.5px;color:#6f6c68}
+.talk span{transition:color .4s var(--ease)}
+.talk:hover span{color:var(--ink)}
+.circle{width:clamp(38px,3.6vw,48px);aspect-ratio:1;border-radius:50%;background:var(--paper);display:grid;place-items:center;box-shadow:0 1px 0 rgba(0,0,0,.03),0 8px 24px -12px rgba(0,0,0,.18);transition:background .45s var(--ease),color .45s var(--ease)}
+.circle svg{width:13px;height:13px}
+.talk:hover .circle,.lang:hover{background:var(--ink);color:var(--paper)}
+.lang{font:600 10.5px/1 var(--sans);letter-spacing:.06em;overflow:hidden}
+.lang b{display:block;font-weight:600}
+
+/* ---------- stage ---------- */
+.stage{position:fixed;inset:0;bottom:var(--strip)}
+.slide{position:absolute;inset:0;visibility:hidden}
+.slide.is-active{visibility:visible}
+.slide:not(.is-active) .ext{display:none}
+.ghost{position:absolute;left:calc(var(--gx) - .04em);top:50%;transform:translateY(-57%);font:400 min(37vh,24vw)/1 var(--serif);color:var(--ghost);white-space:nowrap;letter-spacing:-.03em;pointer-events:none;user-select:none}
+.ghost__in{display:block;will-change:transform}
+.copy{position:absolute;z-index:4;left:var(--gx);top:0;bottom:0;width:min(46vw,640px);pointer-events:none}
+.copy > *{pointer-events:auto}
+.title{position:absolute;left:0;top:38.5vh;font:900 min(8.6vw,12.4vh)/.98 var(--serif);letter-spacing:-.025em;white-space:nowrap}
+.title--2l{top:33.5vh;font-size:min(7.6vw,11.2vh)}
+.meta{position:absolute;left:0;top:calc(38.5vh + min(8.6vw,12.4vh) * 1.12)}
+.slide--me .meta{top:calc(33.5vh + min(7.6vw,11.2vh) * 2.1)}
+.sub{font:400 clamp(13px,1.15vw,16px)/1.3 var(--sans);color:var(--muted)}
+.note{margin-top:max(3.2vh,1.6rem);max-width:21rem;font:400 13px/1.6 var(--sans);color:#55524e}
+.note::before{content:"";display:block;width:26px;height:1.5px;background:var(--ink);margin-bottom:1rem}
+
+.visual{position:absolute;z-index:2;left:46%;right:0;top:0;bottom:0}
+.visual__in{position:absolute;inset:0;will-change:transform}
+
+/* slide 1: portrait in an arch */
+.arch{position:absolute;bottom:0;right:var(--gx);height:min(78%,calc((54vw - var(--gx) * 2) / .76));aspect-ratio:.76}
+.arch__frame{position:absolute;inset:0;border-radius:999px 999px 0 0;overflow:hidden;background:#d9d4cc;isolation:isolate}
+.arch__frame img{position:absolute;inset:-6% -6% 0;width:112%;height:106%;max-width:none;object-fit:cover;object-position:46% 30%;filter:saturate(.82) contrast(1.04) brightness(1.02);will-change:transform}
+.arch__frame::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(242,240,237,0) 55%,rgba(11,11,11,.22) 100%);pointer-events:none}
+.arch::before{content:"";position:absolute;inset:-14px -14px 0;border:1px solid var(--line);border-bottom:0;border-radius:999px 999px 0 0;pointer-events:none}
+.arch__cap{position:absolute;left:-2.6rem;bottom:1.2rem;transform:rotate(-90deg);transform-origin:left bottom;white-space:nowrap;font:500 10.5px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+/* slide 2: site sheets */
+.sheets{position:absolute;left:50%;top:56%;height:62%;aspect-ratio:1210/1309;transform:translate(-50%,-50%)}
+.sheet{position:absolute;inset:0;border-radius:6px;overflow:hidden;background:#e9ecef;box-shadow:0 40px 80px -40px rgba(0,0,0,.35),0 2px 6px rgba(0,0,0,.05)}
+.sheet img{width:100%;height:100%;object-fit:cover}
+.sheet--b1{transform:translate(5%,-4%) rotate(4deg);opacity:.4;filter:saturate(.6)}
+.sheet--b2{transform:translate(-5%,3%) rotate(-3.5deg);opacity:.25;filter:saturate(.4)}
+.sheet--main .shot{position:absolute;inset:0}
+.sheet-tag{position:absolute;left:0;right:0;bottom:-2.6rem;display:flex;justify-content:space-between;font:500 10.5px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.sheet-tag b{color:var(--ink);font-weight:600}
+
+/* slide 3: reels */
+.reels{position:absolute;left:50%;top:57%;height:68%;aspect-ratio:9/16;transform:translate(-50%,-50%)}
+.reel{position:absolute;inset:0;border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 50px 90px -45px rgba(0,0,0,.45),0 0 0 1px rgba(0,0,0,.05)}
+.reel video,.reel img{width:100%;height:100%;object-fit:cover}
+.reel{cursor:pointer;will-change:transform}
+.reel:not([data-i="1"]){opacity:0}
+.reel-ui{position:absolute;inset:0;z-index:10;pointer-events:none}
+.reel-ui > *{pointer-events:auto}
+.reel-count{position:absolute;left:0;right:0;bottom:-2.6rem;text-align:center;font:500 10.5px/1 var(--sans);letter-spacing:.08em;color:var(--muted);pointer-events:none}
+.reel-count b{color:var(--ink);font-weight:600}
+.reel-sound{position:absolute;right:12px;bottom:12px;width:34px;height:34px;border-radius:50%;background:rgba(12,12,12,.85);color:#fff;display:grid;place-items:center;transition:transform .5s var(--ease)}
+.reel-sound svg{width:14px;height:14px}
+.reel-sound:hover{transform:scale(1.12)}
+.reel-views{position:absolute;left:12px;top:12px;padding:6px 10px;border-radius:99px;background:rgba(255,255,255,.92);font:600 10.5px/1 var(--sans);letter-spacing:.02em;box-shadow:0 4px 14px -6px rgba(0,0,0,.25)}
+
+/* slide 4: contact */
+.orb{position:absolute;left:50%;top:50%;width:min(46vh,30vw);aspect-ratio:1;transform:translate(-50%,-50%)}
+.orb__btn{position:absolute;inset:15%;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;text-align:center;font:400 clamp(1.1rem,1.6vw,1.6rem)/1.15 var(--serif)}
+.orb__btn em{display:block;font:500 11px/1 var(--sans);letter-spacing:.08em;margin-top:.7rem;opacity:.6;font-style:normal}
+.orb__ring{position:absolute;inset:0;width:100%;height:100%;animation:spin 22s linear infinite}
+.orb__ring text{font:600 7.4px var(--sans);text-transform:uppercase;fill:var(--ink)}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* index + prev/next (shared) */
+.idx{position:fixed;z-index:5;left:var(--gx);top:calc(38.5vh - 4.4rem);font:600 12.5px/1 var(--sans);height:1em;overflow:hidden;font-variant-numeric:tabular-nums}
+.idx.is-2l{top:calc(33.5vh - 4.4rem)}
+.idx span{display:block}
+.pager{position:fixed;z-index:5;left:var(--gx);bottom:calc(var(--strip) + 3.6vh);display:flex;gap:2.6rem;font:600 12.5px/1 var(--sans)}
+.pager button{display:flex;align-items:center;gap:.7rem;padding:.4rem 0;transition:color .4s var(--ease)}
+.pager button:disabled{color:var(--muted);cursor:default}
+.pager svg{width:6px;height:9px;transition:transform .5s var(--ease)}
+.pager .prev:not(:disabled):hover svg{transform:translateX(-4px)}
+.pager .next:not(:disabled):hover svg{transform:translateX(4px)}
+.pager .next{color:var(--muted)}
+.pager .next:not(:disabled){color:var(--muted)}
+.pager .next:not(:disabled):hover{color:var(--ink)}
+
+/* ---------- bottom strip ---------- */
+.strip{position:fixed;z-index:20;left:0;right:0;bottom:0;height:var(--strip);display:flex;background:var(--night);color:#fff}
+.more{position:relative;z-index:2;flex:0 0 var(--more);display:flex;align-items:center;padding-left:var(--gx);gap:1.1rem;font:400 clamp(14px,1.25vw,18px)/1 var(--serif);background:var(--night)}
+.more svg{width:7px;height:11px;transition:transform .55s var(--ease)}
+.more:hover svg{translate:6px 0}
+.more svg{transition:transform .7s var(--ease),translate .55s var(--ease)}
+.more__in{display:flex;align-items:center;gap:1.1rem;padding:.8rem 0}
+.more__label{display:block;overflow:hidden;height:1.15em}
+.more__label span{display:block}
+.strip__bg{position:absolute;left:var(--more);right:0;top:0;bottom:0;overflow:hidden}
+.strip__bg i{position:absolute;inset:-20%;background-size:cover;background-position:center;filter:blur(38px) saturate(1.2) brightness(.62);opacity:0;transform:scale(1.15)}
+.strip__bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--night) 0%,rgba(11,11,11,.65) 18%,rgba(11,11,11,.15) 55%,rgba(11,11,11,.35) 100%)}
+.thumbs{position:relative;z-index:2;flex:1;display:flex;align-items:center;justify-content:space-between;padding:0 var(--gx) 0 2.2vw;list-style:none}
+.thumb{display:flex;align-items:center;gap:.9rem;opacity:.55;transition:opacity .6s var(--ease)}
+.thumb:hover,.thumb.is-active{opacity:1}
+.thumb__img{position:relative;width:clamp(34px,3.4vw,46px);aspect-ratio:1;border-radius:50%;overflow:hidden;background:#222;flex:none}
+.thumb__img img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+.thumb:hover .thumb__img img{transform:scale(1.15)}
+.thumb__ring{position:absolute;inset:-4px;width:calc(100% + 8px);height:calc(100% + 8px);transform:rotate(-90deg);pointer-events:none}
+.thumb__ring circle{fill:none;stroke:#fff;stroke-width:1.2;stroke-dasharray:151;stroke-dashoffset:151}
+.thumb__txt{font:600 10.5px/1.35 var(--sans);text-align:left}
+.thumb__txt small{display:block;font-weight:400;opacity:.6;font-size:10px}
+.thumb--icon .thumb__img{background:#fff;color:var(--ink);display:grid;place-items:center}
+.thumb--icon svg{width:12px;height:12px}
+
+/* ---------- case panel ---------- */
+.panel{position:fixed;inset:0;z-index:60;visibility:hidden}
+.panel.is-open{visibility:visible}
+.panel__curtain{position:absolute;inset:0;background:var(--night);clip-path:inset(100% 0 0 0)}
+.panel__body{position:absolute;inset:0;background:var(--bg);clip-path:inset(100% 0 0 0);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.panel__bar{position:relative;z-index:3;display:flex;justify-content:space-between;align-items:center;height:16vh;padding:0 var(--gx);pointer-events:none}
+.panel__bar > *{pointer-events:auto}
+.panel__crumb{font:600 11px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.close{position:fixed;z-index:5;top:8vh;right:var(--gx);translate:0 -50%;width:clamp(42px,3.8vw,52px);aspect-ratio:1;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;transition:transform .7s var(--ease)}
+.close:hover{transform:rotate(90deg)}
+.close svg{width:12px;height:12px}
+.case{display:none;padding:0 var(--gx) 10vh}
+.case.is-current{display:block}
+.case__head{position:relative;padding-top:4vh}
+.case__idx{font:600 12.5px/1 var(--sans);margin-bottom:2.2rem}
+.case__title{font:900 clamp(4rem,15vw,15rem)/.9 var(--serif);letter-spacing:-.035em;white-space:nowrap}
+.case__sub{margin-top:2rem;font:400 clamp(14px,1.2vw,17px)/1.4 var(--sans);color:var(--muted)}
+.facts{display:grid;grid-template-columns:repeat(4,1fr);margin-top:12vh;border-top:1px solid var(--line)}
+.fact{padding:1.4rem 1.5rem 0 0}
+.fact dt{font:600 10.5px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.9rem}
+.fact dd{font:400 clamp(1.05rem,1.5vw,1.45rem)/1.25 var(--serif)}
+.lead{margin:18vh 0 0 auto;max-width:56rem;font:400 clamp(1.6rem,3.1vw,3.2rem)/1.18 var(--serif);letter-spacing:-.012em}
+.lead em{font-style:italic;color:#7a7772}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:4vw;margin-top:9vh;margin-left:auto;max-width:56rem}
+.cols--3{grid-template-columns:repeat(3,1fr);max-width:none;margin-top:12vh}
+.cols p{font:400 15px/1.7 var(--sans);color:#4a4743;max-width:62ch}
+.cols h3{font:600 10.5px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
+.gallery{margin-top:16vh;display:grid;gap:2vw}
+.gallery--sheets{grid-template-columns:repeat(2,1fr)}
+.gallery--reels{grid-template-columns:repeat(5,1fr);gap:1.4vw}
+.g-item{position:relative;overflow:hidden;border-radius:6px;background:#e5e2dd}
+.g-item img,.g-item video{width:100%;height:100%;object-fit:cover;transition:transform 1.4s var(--ease)}
+.g-item:hover img{transform:scale(1.04)}
+.gallery--sheets .g-item{aspect-ratio:1210/1309}
+.gallery--sheets .g-item:nth-child(even){margin-top:14vh}
+.gallery--reels .g-item{aspect-ratio:9/16;border-radius:14px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.05)}
+.gallery--reels .g-item:nth-child(even){margin-top:8vh}
+.g-cap{display:flex;justify-content:space-between;margin-top:.9rem;font:500 10.5px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.big-num{margin-top:18vh;display:flex;align-items:flex-end;gap:3vw;flex-wrap:wrap}
+.big-num strong{font:900 clamp(5rem,17vw,17rem)/.82 var(--serif);letter-spacing:-.04em}
+.big-num span{max-width:20rem;font:400 15px/1.6 var(--sans);color:#4a4743;padding-bottom:1.2vw}
+
+.review{margin:18vh auto 0;max-width:62rem;text-align:center}
+.review__mark{font:400 7rem/0.5 var(--serif);color:var(--ink);height:3.2rem;display:block}
+.review__quote{font:400 italic clamp(1.6rem,3.4vw,3.4rem)/1.2 var(--serif);letter-spacing:-.01em}
+.review__who{display:inline-flex;align-items:center;gap:.9rem;margin-top:3rem;font:600 12px/1.35 var(--sans);text-align:left}
+.review__who img{width:44px;height:44px;border-radius:50%;object-fit:cover;filter:grayscale(1)}
+.review__who small{display:block;font-weight:400;color:var(--muted)}
+
+.services{margin-top:14vh;border-top:1px solid var(--line)}
+.service{display:grid;grid-template-columns:7rem 1fr auto;align-items:baseline;gap:2rem;padding:2.2rem 0;border-bottom:1px solid var(--line)}
+.service i{font:600 12.5px/1 var(--sans);font-style:normal;color:var(--muted)}
+.service b{font:900 clamp(1.8rem,4.6vw,4.4rem)/1 var(--serif);letter-spacing:-.02em;font-weight:900}
+.service span{font:400 13px/1.5 var(--sans);color:var(--muted);max-width:18rem;text-align:right}
+
+.nextcase{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;margin-top:20vh;padding-top:2rem;border-top:1px solid var(--ink)}
+.nextcase small{display:block;font:600 10.5px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:1.4rem}
+.nextcase strong{display:block;font:900 clamp(3rem,9vw,9rem)/.9 var(--serif);letter-spacing:-.03em;transition:transform .9s var(--ease)}
+.nextcase:hover strong{transform:translateX(1.5vw)}
+.nextcase .circle{width:clamp(56px,6vw,84px);background:var(--ink);color:var(--bg)}
+.nextcase:hover .circle{transform:rotate(-45deg)}
+.nextcase .circle{transition:transform .9s var(--ease)}
+.ext{display:inline-flex;align-items:center;gap:.9rem;margin-top:1.6rem;padding:.5rem .5rem .5rem 1.15rem;border:1px solid var(--ink);border-radius:99px;font:600 12.5px/1 var(--sans);letter-spacing:.01em;transition:background .5s var(--ease),color .5s var(--ease)}
+.ext i{width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;transition:background .5s var(--ease),color .5s var(--ease)}
+.ext svg{width:9px;height:9px;transition:transform .5s var(--ease)}
+.ext:hover{background:var(--ink);color:var(--bg)}
+.ext:hover i{background:var(--bg);color:var(--ink)}
+.ext:hover svg{transform:translate(2px,-2px) rotate(0deg)}
+.site-link{display:inline-flex;align-items:center;gap:.8rem;margin-top:2.4rem;font:600 12.5px/1 var(--sans);border-bottom:1px solid var(--ink);padding-bottom:.4rem}
+.site-link svg{width:10px;height:10px;transition:transform .5s var(--ease)}
+.site-link:hover svg{transform:translate(3px,-3px)}
+
+/* ---------- cursor ---------- */
+.cursor{position:fixed;z-index:100;left:0;top:0;pointer-events:none;mix-blend-mode:difference;display:none}
+body.has-cursor .cursor{display:block}
+.cursor__dot{position:absolute;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:#fff;transition:transform .45s var(--ease)}
+.cursor__ring{position:absolute;width:76px;height:76px;margin:-38px 0 0 -38px;border-radius:50%;background:#fff;transform:scale(0);transition:transform .6s var(--ease);display:grid;place-items:center}
+.cursor__ring span{font:600 10px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:#000;opacity:0;transition:opacity .3s}
+.cursor.is-hover .cursor__dot{transform:scale(5.5)}
+.cursor.is-label .cursor__dot{transform:scale(0)}
+.cursor.is-label .cursor__ring{transform:scale(1)}
+.cursor.is-label .cursor__ring span{opacity:1}
+
+/* ---------- mobile ---------- */
+@media (max-width:860px){
+  :root{--gx:16px;--strip:94px;--more:84px}
+  .top{height:76px;padding:0 10px 0 var(--gx)}
+  .talk span{display:none}
+  .top__right{gap:10px}
+  .ghost{top:22%;transform:none;font-size:34vw}
+  .copy{width:auto;right:var(--gx)}
+  .title,.title--2l{top:118px;font-size:13.4vw}
+  .meta{top:calc(118px + 13.4vw * 1.12)}
+  .slide--me .meta{top:calc(118px + 13.4vw * 2.08)}
+  .note{display:none}
+  .meta .ext{position:fixed;left:var(--gx);bottom:calc(var(--strip) + 14px);margin:0}
+  .idx,.idx.is-2l{top:96px}
+  .visual{left:0;top:calc(118px + 13.4vw * 1.6)}
+  .slide--me .visual{top:calc(118px + 13.4vw * 2.3)}
+  .arch{right:50%;translate:50% 0;height:auto;width:min(84vw,calc((100% - 24px) * .76))}
+  .arch__cap{display:none}
+  .sheets{height:auto;width:72%;top:46%}
+  .sheet-tag{bottom:-2rem}
+  .sheet-tag > span:last-child{display:none}
+  .reels{height:72%;top:47%}
+  .reel-count{bottom:-1.8rem}
+  .orb{width:72vw}
+  .pager{left:auto;right:var(--gx);bottom:calc(var(--strip) + 14px);gap:1.2rem}
+  .pager .lbl{display:none}
+  .pager button{width:40px;height:40px;border-radius:50%;background:var(--paper);justify-content:center;box-shadow:0 8px 24px -12px rgba(0,0,0,.25)}
+  .pager .next,.pager .next:not(:disabled){color:var(--ink)}
+  .pager button:disabled{opacity:.4}
+  .more{padding-left:var(--gx);font-size:15px}
+  .thumbs{padding:0 var(--gx) 0 8px;gap:8px}
+  .thumb__txt{display:none}
+  .thumb{opacity:.45}
+  .facts{grid-template-columns:1fr 1fr;row-gap:1.6rem}
+  .cols{grid-template-columns:1fr;gap:2.4rem}
+  .lead{margin-top:12vh}
+  .gallery--sheets{grid-template-columns:1fr;gap:16px}
+  .gallery--sheets .g-item:nth-child(even){margin-top:0}
+  .gallery--reels{grid-template-columns:repeat(2,1fr);gap:12px}
+  .gallery--reels .g-item:nth-child(even){margin-top:6vh}
+  .service{grid-template-columns:2.4rem 1fr;gap:1rem}
+  .service span{grid-column:2;text-align:left}
+  .panel__bar{height:76px}
+  .close{top:38px}
+  .case__title{font-size:min(18vw,6.4rem);white-space:normal}
+  .review__mark{font-size:5rem}
+}
+@media (prefers-reduced-motion:reduce){
+  .orb__ring{animation:none}
+}
+</style>
+</head>
+<body>
+
+<!-- preloader -->
+<div class="loader" aria-hidden="true">
+  <div class="loader__logo" data-split>nk.</div>
+  <div class="loader__count"><span>0</span></div>
+  <div class="loader__bar"><i></i></div>
+</div>
+
+<!-- header -->
+<header class="top">
+  <a href="#" class="logo magnetic" data-go="0" aria-label="nk. — home"><span>nk.</span></a>
+  <div class="top__right">
+    <a class="talk magnetic" href="https://t.me/krasikovnikolay" target="_blank" rel="noopener">
+      <span data-ru="Написать">Let’s talk</span>
+      <i class="circle"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 9 9 3M4 3h5v5"/></svg></i>
+    </a>
+    <button class="circle lang magnetic" aria-label="Switch language"><b>RU</b></button>
+  </div>
+</header>
+
+<main class="stage" aria-live="polite">
+
+  <!-- 01 — me -->
+  <section class="slide slide--me" data-bg="assets/img/me-2.webp" data-2l>
+    <div class="ghost" aria-hidden="true"><span class="ghost__in" data-en="Krasikov" data-ru="Красиков">Krasikov</span></div>
+    <div class="visual"><div class="visual__in">
+      <figure class="arch">
+        <div class="arch__frame"><img src="assets/img/me-2.webp" alt="Nikolay Krasikov" data-alt-ru="Николай Красиков"></div>
+        <figcaption class="arch__cap" data-ru="Москва · 2026">Moscow · 2026</figcaption>
+      </figure>
+    </div></div>
+    <div class="copy">
+      <h1 class="title title--2l" data-split data-en="Nikolay|Krasikov" data-ru="Николай|Красиков">Nikolay|Krasikov</h1>
+      <div class="meta"><p class="sub" data-en="vibe coder" data-ru="вайбкодер">vibe coder</p>
+      <p class="note" data-ru="Собираю для бизнеса всё, что нужно: сайты, ИИ-агентов, автоматизацию. Быстро, чисто и без агентского ценника.">I build whatever a business needs — websites, AI agents, automation. Fast, clean, and without the agency price tag.</p></div>
+    </div>
+  </section>
+
+  <!-- 02 — xinz -->
+  <section class="slide" data-bg="assets/img/xinz-2.webp">
+    <div class="ghost" aria-hidden="true"><span class="ghost__in">Xinz</span></div>
+    <div class="visual"><div class="visual__in">
+      <div class="sheets" data-cursor="Open" data-open="xinz">
+        <div class="sheet sheet--b2"><img src="assets/img/xinz-3.webp" alt=""></div>
+        <div class="sheet sheet--b1"><img src="assets/img/xinz-4.webp" alt=""></div>
+        <div class="sheet sheet--main">
+          <div class="shot"><img src="assets/img/xinz-1.webp" alt="XINZ website — About"></div>
+          <div class="shot"><img src="assets/img/xinz-2.webp" alt="XINZ website — Works"></div>
+          <div class="shot"><img src="assets/img/xinz-3.webp" alt="XINZ website — Reels"></div>
+          <div class="shot"><img src="assets/img/xinz-4.webp" alt="XINZ website — Contact"></div>
+        </div>
+        <div class="sheet-tag"><span data-tabname><b>About</b></span><span data-ru="2 часа · от идеи до запуска">2 hours · idea to launch</span></div>
+      </div>
+    </div></div>
+    <div class="copy">
+      <h2 class="title" data-split data-en="Xinz" data-ru="Xinz">Xinz</h2>
+      <div class="meta"><p class="sub" data-en="portfolio site for a video editor" data-ru="сайт-портфолио для монтажёра">portfolio site for a video editor</p>
+      <p class="note" data-ru="Монтажёру нужен был дом для его работ. Концепция, дизайн и код — готово за 2 часа.">A video editor needed a home for his work. Concept, design and code — shipped in two hours.</p>
+      <a class="ext magnetic" href="https://xinzcreator.github.io" target="_blank" rel="noopener" data-cursor="Visit"><span>xinzcreator.com</span><i><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M1 9 9 1M2.5 1H9v6.5"/></svg></i></a></div>
+    </div>
+  </section>
+
+  <!-- 03 — arbicut -->
+  <section class="slide" data-bg="assets/video/reel-2.jpg">
+    <div class="ghost" aria-hidden="true"><span class="ghost__in">Arbicut</span></div>
+    <div class="visual"><div class="visual__in">
+      <div class="reels">
+        <div class="reel" data-i="0"><video src="assets/video/reel-1.mp4" poster="assets/video/reel-1.jpg" muted loop playsinline preload="none"></video></div>
+        <div class="reel" data-i="1"><video src="assets/video/reel-2.mp4" poster="assets/video/reel-2.jpg" muted loop playsinline preload="metadata"></video></div>
+        <div class="reel" data-i="2"><video src="assets/video/reel-3.mp4" poster="assets/video/reel-3.jpg" muted loop playsinline preload="none"></video></div>
+        <div class="reel" data-i="3"><video src="assets/video/reel-4.mp4" poster="assets/video/reel-4.jpg" muted loop playsinline preload="none"></video></div>
+        <div class="reel" data-i="4"><video src="assets/video/reel-5.mp4" poster="assets/video/reel-5.jpg" muted loop playsinline preload="none"></video></div>
+        <div class="reel-ui">
+          <span class="reel-views" data-ru="10–12K просмотров">10–12K views</span>
+          <button class="reel-sound" aria-label="Sound on/off"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M2 6h3l4-3v10L5 10H2z"/><path class="wave" d="M11 5.5c1.2 1.4 1.2 3.6 0 5" fill="none" stroke="currentColor" stroke-width="1.3" opacity=".25"/></svg></button>
+          <span class="reel-count"><b>02</b> / 05</span>
+        </div>
+      </div>
+    </div></div>
+    <div class="copy">
+      <h2 class="title" data-split data-en="Arbicut" data-ru="Arbicut">Arbicut</h2>
+      <div class="meta"><p class="sub" data-en="AI video editor for traffic arbitrage" data-ru="ИИ-монтажёр для арбитража трафика">AI video editor for traffic arbitrage</p>
+      <p class="note" data-ru="ИИ-агент для арбитражников, который сам делает ролики для TikTok и Reels. Монтажёр больше не нужен: пишешь тему — через 15 минут готовое видео для залива.">An AI agent for traffic arbitrage teams that makes TikTok and Reels videos on its own. No editor needed: type a topic — get a ready-to-post reel in 15 minutes.</p></div>
+    </div>
+  </section>
+
+  <!-- 04 — contact -->
+  <section class="slide" data-bg="assets/img/me-2.webp">
+    <div class="ghost" aria-hidden="true"><span class="ghost__in" data-en="Hello" data-ru="Привет">Hello</span></div>
+    <div class="visual"><div class="visual__in">
+      <div class="orb">
+        <svg class="orb__ring" viewBox="0 0 200 200" aria-hidden="true">
+          <defs><path id="orbPath" d="M100,100 m-92,0 a92,92 0 1,1 184,0 a92,92 0 1,1 -184,0"/></defs>
+          <text><textPath href="#orbPath" data-ring textLength="574" lengthAdjust="spacing">open for projects · open for projects · open for projects ·</textPath></text>
+        </svg>
+        <a class="orb__btn magnetic" href="https://t.me/krasikovnikolay" target="_blank" rel="noopener" data-cursor="Write">
+          <span>Telegram<em>@krasikovnikolay</em></span>
+        </a>
+      </div>
+    </div></div>
+    <div class="copy">
+      <h2 class="title" data-split data-en="Let’s talk" data-ru="Обсудим">Let’s talk</h2>
+      <div class="meta"><p class="sub" data-en="one message is enough" data-ru="достаточно одного сообщения">one message is enough</p>
+      <p class="note" data-ru="Расскажите, что нужно бизнесу. Отвечу в тот же день — с идеей, сроком и ценой.">Tell me what your business needs. I’ll reply the same day — with an idea, a timeline and a price.</p></div>
+    </div>
+  </section>
+</main>
+
+<div class="idx is-2l" aria-hidden="true"><span>01</span></div>
+
+<nav class="pager" aria-label="Slides">
+  <button class="prev" disabled aria-label="Previous"><svg viewBox="0 0 6 9" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M5 1 1.5 4.5 5 8"/></svg><span class="lbl" data-ru="назад">previous</span></button>
+  <button class="next" aria-label="Next"><span class="lbl" data-ru="далее">next</span><svg viewBox="0 0 6 9" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M1 1l3.5 3.5L1 8"/></svg></button>
+</nav>
+
+<!-- bottom strip -->
+<footer class="strip">
+  <button class="more" aria-label="Next slide">
+    <span class="more__in magnetic"><span class="more__label"><span data-more>next</span></span>
+    <svg viewBox="0 0 7 11" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M1 1l4.5 4.5L1 10"/></svg></span>
+  </button>
+  <div class="strip__bg" aria-hidden="true"></div>
+  <ol class="thumbs">
+    <li><button class="thumb is-active" data-go="0">
+      <span class="thumb__img"><img src="assets/img/me-2.webp" alt="" style="object-position:48% 22%;transform-origin:48% 22%"><svg class="thumb__ring" viewBox="0 0 50 50"><circle cx="25" cy="25" r="24"/></svg></span>
+      <span class="thumb__txt"><span data-ru="Николай">Nikolay</span><small data-ru="кто я">about me</small></span>
+    </button></li>
+    <li><button class="thumb" data-go="1">
+      <span class="thumb__img"><img src="assets/img/xinz-2.webp" alt="" style="object-position:28% 30%"><svg class="thumb__ring" viewBox="0 0 50 50"><circle cx="25" cy="25" r="24"/></svg></span>
+      <span class="thumb__txt">Xinz<small data-ru="кейс 01 · сайт">case 01 · website</small></span>
+    </button></li>
+    <li><button class="thumb" data-go="2">
+      <span class="thumb__img"><img src="assets/video/reel-2.jpg" alt="" style="object-position:50% 40%"><svg class="thumb__ring" viewBox="0 0 50 50"><circle cx="25" cy="25" r="24"/></svg></span>
+      <span class="thumb__txt">Arbicut<small data-ru="кейс 02 · ИИ-агент">case 02 · AI agent</small></span>
+    </button></li>
+    <li><button class="thumb thumb--icon" data-go="3">
+      <span class="thumb__img"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 9 9 3M4 3h5v5"/></svg><svg class="thumb__ring" viewBox="0 0 50 50"><circle cx="25" cy="25" r="24"/></svg></span>
+      <span class="thumb__txt"><span data-ru="Контакт">Contact</span><small>@krasikovnikolay</small></span>
+    </button></li>
+  </ol>
+</footer>
+
+<!-- case panel -->
+<div class="panel" role="dialog" aria-modal="true" aria-label="Case">
+  <div class="panel__curtain"></div>
+  <div class="panel__body">
+    <div class="panel__inner">
+      <div class="panel__bar">
+        <span class="panel__crumb" data-crumb>nk. / about</span>
+        <button class="close magnetic" aria-label="Close" data-cursor="Close"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l10 10M11 1 1 11"/></svg></button>
+      </div>
+
+      <!-- xinz -->
+      <article class="case" data-case="xinz">
+        <header class="case__head">
+          <div class="case__idx rv">01</div>
+          <h2 class="case__title" data-split data-en="Xinz" data-ru="Xinz">Xinz</h2>
+          <p class="case__sub rv" data-ru="Сайт-портфолио для видеомонтажёра">Portfolio website for a video editor</p>
+          <div class="rv" style="margin-top:2.4rem"><a class="ext magnetic" href="https://xinzcreator.github.io" target="_blank" rel="noopener" data-cursor="Visit"><span>xinzcreator.com</span><i><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M1 9 9 1M2.5 1H9v6.5"/></svg></i></a></div>
+        </header>
+        <dl class="facts">
+          <div class="fact rv"><dt data-ru="Клиент">Client</dt><dd data-ru="XINZ, монтажёр">XINZ, video editor</dd></div>
+          <div class="fact rv"><dt data-ru="Задача">Task</dt><dd data-ru="Сайт-портфолио">Portfolio website</dd></div>
+          <div class="fact rv"><dt data-ru="Срок">Time</dt><dd data-ru="2 часа">2 hours</dd></div>
+          <div class="fact rv"><dt data-ru="Стек">Stack</dt><dd data-ru="Claude Code · HTML">Claude Code · HTML</dd></div>
+        </dl>
+        <p class="lead rv" data-ru="Монтажёру не нужен ещё один сайт на конструкторе. Ему нужно место, где работы <em>смотрят до конца.</em>">An editor doesn’t need another site-builder template. He needs a place where people <em>watch the work to the end.</em></p>
+        <div class="cols">
+          <div class="rv"><h3 data-ru="Идея">Idea</h3><p data-ru="Папка с вкладками, как на столе у монтажёра: обо мне, работы, рилсы, моушн, контакт. Тиснение, рукописные пометки, бумажная фактура.">A tabbed folder, like the one on an editor’s desk: about, works, reels, motion, contact. Embossing, handwritten notes, paper texture.</p></div>
+          <div class="rv"><h3 data-ru="Что внутри">Inside</h3><p data-ru="Плеер прямо на сайте, две языковые версии, форма брифа, которая сразу открывает Telegram. Один файл — выложил и работает.">A built-in player, two languages, and a brief form that opens Telegram straight away. One file — upload it and it works.</p></div>
+        </div>
+        <div class="gallery gallery--sheets">
+          <figure class="rv-img"><div class="g-item"><img src="assets/img/xinz-1.webp" alt="About" loading="lazy"></div><figcaption class="g-cap"><span>01</span><span data-ru="Обо мне">About</span></figcaption></figure>
+          <figure class="rv-img"><div class="g-item"><img src="assets/img/xinz-2.webp" alt="Works" loading="lazy"></div><figcaption class="g-cap"><span>02</span><span data-ru="Работы">Works</span></figcaption></figure>
+          <figure class="rv-img"><div class="g-item"><img src="assets/img/xinz-3.webp" alt="Reels" loading="lazy"></div><figcaption class="g-cap"><span>03</span><span data-ru="Рилсы">Reels</span></figcaption></figure>
+          <figure class="rv-img"><div class="g-item"><img src="assets/img/xinz-4.webp" alt="Contact" loading="lazy"></div><figcaption class="g-cap"><span>04</span><span data-ru="Контакт">Contact</span></figcaption></figure>
+        </div>
+        <figure class="review rv">
+          <span class="review__mark" aria-hidden="true">“</span>
+          <blockquote class="review__quote" data-ru="Крутой сайт, быстро сделал, а самое главное — недорого. Красивый дизайн, никогда такого не видел.">Cool site, done fast — and most importantly, not expensive. Beautiful design, I’ve never seen anything like it.</blockquote>
+          <figcaption class="review__who"><img src="assets/img/xinz-avatar.webp" alt=""><span>XINZ<small data-ru="видеомонтажёр · отзыв в Telegram">video editor · review in Telegram</small></span></figcaption>
+        </figure>
+        <a class="nextcase rv" href="#" data-case-go="arbicut" data-cursor="Next">
+          <div><small data-ru="Следующий кейс">Next case</small><strong>Arbicut</strong></div>
+          <i class="circle"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 6h10M7 2l4 4-4 4"/></svg></i>
+        </a>
+      </article>
+
+      <!-- arbicut -->
+      <article class="case" data-case="arbicut">
+        <header class="case__head">
+          <div class="case__idx rv">02</div>
+          <h2 class="case__title" data-split data-en="Arbicut" data-ru="Arbicut">Arbicut</h2>
+          <p class="case__sub rv" data-ru="ИИ-монтажёр для арбитража трафика · запущен вместе с экспертом по арбитражу">AI video editor for traffic arbitrage · launched with an arbitrage expert</p>
+        </header>
+        <dl class="facts">
+          <div class="fact rv"><dt data-ru="Для кого">For</dt><dd data-ru="Арбитражники и команды">Arbitrage teams</dd></div>
+          <div class="fact rv"><dt data-ru="Заменяет">Replaces</dt><dd data-ru="Видеомонтажёра">A video editor</dd></div>
+          <div class="fact rv"><dt data-ru="Один ролик">One reel</dt><dd data-ru="10–15 минут">10–15 minutes</dd></div>
+          <div class="fact rv"><dt data-ru="Просмотры">Views</dt><dd data-ru="10–12K на ролик">10–12K per reel</dd></div>
+        </dl>
+        <p class="lead rv" data-ru="Арбитраж живёт на объёме: каждую неделю нужны десятки свежих роликов. И всё упирается в монтажёров — дорогих, медленных и не желающих работать. Arbicut их заменяет: <em>это команда ИИ-агентов, которая делает ролики для залива сама.</em>">Arbitrage runs on volume: dozens of fresh videos every week. And it always breaks on editors — expensive, slow and unwilling to work. Arbicut replaces them: <em>a team of AI agents that makes traffic videos on its own.</em></p>
+        <div class="cols cols--3">
+          <div class="rv"><h3 data-ru="Для кого">Who it’s for</h3><p data-ru="Арбитражники и команды, которые льют трафик из TikTok, Reels и Shorts в Telegram-каналы. Навыки монтажа не нужны.">Arbitrage specialists and teams who drive traffic from TikTok, Reels and Shorts into Telegram channels. No editing skills needed.</p></div>
+          <div class="rv"><h3 data-ru="Проблема">The problem</h3><p data-ru="Монтажёры стоят денег, срывают сроки и пропадают. Один человек — в лучшем случае пара роликов в день, и вся воронка зависит от его настроения.">Editors cost money, miss deadlines and disappear. One person makes a couple of videos a day at best — and the whole funnel depends on their mood.</p></div>
+          <div class="rv"><h3 data-ru="Как помогает">How it helps</h3><p data-ru="Ролик за 15 минут вместо суток. Сколько нужно, каждый день, по цене подписки. Ролики собраны по формуле, которая стабильно даёт 10–12K просмотров.">A reel in 15 minutes instead of a day. As many as you need, every day, for the price of a subscription. Built on a formula that steadily gets 10–12K views.</p></div>
+        </div>
+        <div class="services">
+          <div class="service rv"><i>01</i><b data-ru="Тема">Topic</b><span data-ru="Пишешь одну строку: о чём ролик.">You type one line: what the video is about.</span></div>
+          <div class="service rv"><i>02</i><b data-ru="Сценарий">Script</b><span data-ru="Агент-сценарист даёт 10 хуков и сценарий на 30 секунд.">The writer agent drafts 10 hooks and a 30-second script.</span></div>
+          <div class="service rv"><i>03</i><b data-ru="Картинка">Visuals</b><span data-ru="Агент-дизайнер собирает сцены и персонажей.">The designer agent builds the scenes and characters.</span></div>
+          <div class="service rv"><i>04</i><b data-ru="Монтаж">Edit</b><span data-ru="Озвучка, пословные субтитры, переходы, музыка и звук.">Voice-over, word-by-word captions, transitions, music, sound.</span></div>
+          <div class="service rv"><i>05</i><b data-ru="Готово">Ready</b><span data-ru="Агент сам смотрит ролик и правит. На выходе final.mp4, описание и хэштеги.">The agent watches the reel and fixes it. You get final.mp4, a caption and hashtags.</span></div>
+        </div>
+        <div class="big-num rv">
+          <strong>10–12K</strong>
+          <span data-ru="просмотров в TikTok — стабильно, на каждом ролике. Продукт запущен вместе с экспертом по арбитражу, и ни одного живого монтажёра.">views on TikTok — steady, on every reel. Launched together with an arbitrage expert, with not a single human editor.</span>
+        </div>
+        <div class="gallery gallery--reels">
+          <figure class="rv-img"><div class="g-item" data-cursor="Sound"><video data-src="assets/video/reel-1.mp4" poster="assets/video/reel-1.jpg" muted loop playsinline preload="none"></video></div></figure>
+          <figure class="rv-img"><div class="g-item" data-cursor="Sound"><video data-src="assets/video/reel-2.mp4" poster="assets/video/reel-2.jpg" muted loop playsinline preload="none"></video></div></figure>
+          <figure class="rv-img"><div class="g-item" data-cursor="Sound"><video data-src="assets/video/reel-3.mp4" poster="assets/video/reel-3.jpg" muted loop playsinline preload="none"></video></div></figure>
+          <figure class="rv-img"><div class="g-item" data-cursor="Sound"><video data-src="assets/video/reel-4.mp4" poster="assets/video/reel-4.jpg" muted loop playsinline preload="none"></video></div></figure>
+          <figure class="rv-img"><div class="g-item" data-cursor="Sound"><video data-src="assets/video/reel-5.mp4" poster="assets/video/reel-5.jpg" muted loop playsinline preload="none"></video></div></figure>
+        </div>
+        <a class="nextcase rv" href="#" data-case-go="contact" data-cursor="Write">
+          <div><small data-ru="Ваш проект — следующий">Your project is next</small><strong data-ru="Обсудим">Let’s talk</strong></div>
+          <i class="circle"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 6h10M7 2l4 4-4 4"/></svg></i>
+        </a>
+      </article>
+    </div>
+  </div>
+</div>
+
+<div class="cursor" aria-hidden="true"><div class="cursor__ring"><span></span></div><div class="cursor__dot"></div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const store = { get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }, set(k,v){ try { localStorage.setItem(k,v); } catch(e){} } };
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fine = matchMedia('(hover:hover) and (pointer:fine)').matches;
+  const mobile = () => innerWidth <= 860;
+
+  if (!window.gsap) { // no CDN — still a usable page
+    document.querySelector('.loader').remove();
+    $$('.slide')[0].classList.add('is-active');
+    return;
+  }
+  gsap.defaults({ ease: 'expo.out' });
+
+  /* ---------- language ---------- */
+  let lang = new URLSearchParams(location.search).get('lang') || store.get('nk-lang') || 'en';
+  if (lang !== 'ru') lang = 'en';
+  $$('[data-ru]').forEach(el => { if (!el.dataset.en) el.dataset.en = el.innerHTML; });
+  const ringText = { en: 'open for projects · open for projects · open for projects ·', ru: 'открыт для проектов · открыт для проектов · открыт для проектов ·' };
+  const tabNames = { en: ['About','Works','Reels','Contact'], ru: ['Обо мне','Работы','Рилсы','Контакт'] };
+
+  function split(el) {
+    const src = (el.dataset[lang] || el.dataset.en || el.textContent);
+    el.setAttribute('aria-label', src.replace(/\|/g, ' '));
+    el.innerHTML = src.split('|').map(l =>
+      `<span class="line" aria-hidden="true">${[...l].map(c => `<span class="ch">${c === ' ' ? '&nbsp;' : c}</span>`).join('')}</span>`
+    ).join('');
+  }
+  function applyLang() {
+    document.documentElement.lang = lang;
+    $$('[data-ru]').forEach(el => {
+      if (el.hasAttribute('data-split')) return;
+      el.innerHTML = el.dataset[lang];
+    });
+    $$('[data-split]').forEach(split);
+    $('[data-ring]').textContent = ringText[lang];
+    $('.lang b').textContent = lang === 'en' ? 'RU' : 'EN';
+    $$('[data-alt-ru]').forEach(img => { img.dataset.altEn ??= img.alt; img.alt = lang === 'ru' ? img.dataset.altRu : img.dataset.altEn; });
+    setTab(tabIdx, true);
+    if (typeof setMore === 'function') setMore(cur);
+  }
+
+  /* ---------- elements ---------- */
+  const slides = $$('.slide');
+  const thumbs = $$('.thumb');
+  const idx = $('.idx');
+  const prevB = $('.pager .prev'), nextB = $('.pager .next');
+  const stripBg = $('.strip__bg');
+  slides.forEach(s => {
+    const i = document.createElement('i');
+    i.style.backgroundImage = `url(${s.dataset.bg})`;
+    stripBg.appendChild(i);
+  });
+  const bgs = $$('i', stripBg);
+  const reelEls = $$('.reels .reel');
+  let reelCur = 1, soundOn = false;
+  const activeVideo = () => $('video', reelEls[reelCur]);
+  let cur = 0, busy = false, tabIdx = 0;
+
+  /* ---------- xinz sheet cycle ---------- */
+  const shots = $$('.sheet--main .shot');
+  function setTab(n, instant) {
+    tabIdx = n;
+    const tag = $('[data-tabname]');
+    if (tag) tag.innerHTML = `<b>${tabNames[lang][n]}</b>&nbsp;&nbsp;0${n + 1} / 04`;
+    if (instant) shots.forEach((s, i) => gsap.set(s, { clipPath: i === n ? 'inset(0% 0 0 0)' : 'inset(100% 0 0 0)', zIndex: i === n ? 2 : 1 }));
+  }
+  let tabTimer;
+  function cycleTabs(on) {
+    clearInterval(tabTimer);
+    if (!on) return;
+    tabTimer = setInterval(() => {
+      const prev = shots[tabIdx], n = (tabIdx + 1) % shots.length, next = shots[n];
+      gsap.set(shots, { zIndex: 1 }); gsap.set(prev, { zIndex: 2 }); gsap.set(next, { zIndex: 3 });
+      gsap.fromTo(next, { clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0% 0 0 0)', duration: 1.3, ease: 'expo.inOut' });
+      gsap.fromTo($('img', next), { scale: 1.18, yPercent: 6 }, { scale: 1, yPercent: 0, duration: 1.6, ease: 'expo.inOut' });
+      gsap.to($('img', prev), { yPercent: -8, duration: 1.3, ease: 'expo.inOut', onComplete: () => gsap.set($('img', prev), { yPercent: 0 }) });
+      setTab(n);
+    }, 2800);
+  }
+
+  const moreText = { en: ['next', 'start'], ru: ['далее', 'в начало'] };
+  function setMore(n) {
+    const last = n === slides.length - 1;
+    $('[data-more]').textContent = moreText[lang][last ? 1 : 0];
+    $('.more svg').style.transform = last ? 'rotate(180deg)' : '';
+    $('.more').setAttribute('aria-label', last ? 'Back to start' : 'Next slide');
+  }
+
+  /* ---------- per-slide side effects ---------- */
+  function onEnter(n) {
+    cycleTabs(n === 1);
+    if (n === 2) { activeVideo().play().catch(() => {}); } else { activeVideo().pause(); }
+    thumbs.forEach((t, i) => {
+      t.classList.toggle('is-active', i === n);
+      gsap.to($('.thumb__ring circle', t), { strokeDashoffset: i === n ? 0 : 151, duration: i === n ? 1.4 : .6, ease: 'expo.inOut' });
+    });
+    prevB.disabled = n === 0;
+    nextB.disabled = n === slides.length - 1;
+    gsap.to(bgs, { opacity: 0, duration: 1.2, ease: 'power2.inOut' });
+    gsap.to(bgs[n], { opacity: 1, scale: 1, duration: 1.6, ease: 'power2.inOut' });
+    setMore(n);
+  }
+
+  /* ---------- slide transition ---------- */
+  function partsOf(s) {
+    return {
+      chars: $$('.title .ch', s),
+      sub: $('.sub', s), note: $('.note', s), ext: $('.meta .ext', s),
+      ghost: $('.ghost__in', s),
+      vis: $('.visual', s), visIn: $('.visual__in', s)
+    };
+  }
+  function rollIndex(n, dir) {
+    const old = $('span', idx);
+    const nu = document.createElement('span');
+    nu.textContent = String(n + 1).padStart(2, '0');
+    nu.style.position = 'absolute'; nu.style.top = '0';
+    idx.style.position = 'fixed';
+    idx.appendChild(nu);
+    gsap.fromTo(nu, { yPercent: 110 * dir }, { yPercent: 0, duration: 1, ease: 'expo.inOut', delay: .2 });
+    gsap.to(old, { yPercent: -110 * dir, duration: 1, ease: 'expo.inOut', delay: .2, onComplete: () => { old.remove(); nu.style.position = ''; } });
+    idx.classList.toggle('is-2l', slides[n].hasAttribute('data-2l'));
+  }
+
+  function go(n) {
+    n = Math.max(0, Math.min(slides.length - 1, n));
+    if (busy || n === cur || panelOpen) return;
+    busy = true;
+    const dir = n > cur ? 1 : -1;
+    const A = partsOf(slides[cur]), B = partsOf(slides[n]);
+    const from = slides[cur];
+    slides[n].classList.add('is-active');
+    rollIndex(n, dir);
+    onEnter(n);
+
+    const d = reduce ? .01 : 1;
+    const tl = gsap.timeline({ onComplete: () => { from.classList.remove('is-active'); gsap.set([A.vis, A.visIn], { clearProps: 'all' }); busy = false; } });
+
+    // out
+    tl.to(A.chars, { yPercent: -112 * dir, rotate: -4 * dir, duration: .75 * d, stagger: .022 * dir, ease: 'expo.in' }, 0)
+      .to([A.sub, A.note, A.ext].filter(Boolean), { y: -24 * dir, opacity: 0, duration: .45 * d, ease: 'expo.in' }, 0)
+      .to(A.ghost, { xPercent: -14 * dir, opacity: 0, duration: 1.2 * d, ease: 'expo.inOut' }, 0)
+      .to(A.vis, { clipPath: dir > 0 ? 'inset(0 0 100% 0)' : 'inset(100% 0 0 0)', duration: 1.15 * d, ease: 'expo.inOut' }, .05)
+      .to(A.visIn, { yPercent: -18 * dir, scale: 1.06, duration: 1.15 * d, ease: 'expo.inOut' }, .05);
+
+    // in
+    tl.fromTo(B.vis, { clipPath: dir > 0 ? 'inset(100% 0 0 0)' : 'inset(0 0 100% 0)' }, { clipPath: 'inset(0% 0 0% 0)', duration: 1.25 * d, ease: 'expo.inOut' }, .12)
+      .fromTo(B.visIn, { yPercent: 24 * dir, scale: 1.18 }, { yPercent: 0, scale: 1, duration: 1.5 * d, ease: 'expo.inOut' }, .12)
+      .fromTo(B.ghost, { xPercent: 16 * dir, opacity: 0 }, { xPercent: 0, opacity: 1, duration: 1.8 * d, ease: 'expo.out' }, .55)
+      .fromTo(B.chars, { yPercent: 112 * dir, rotate: 5 * dir }, { yPercent: 0, rotate: 0, duration: 1.1 * d, stagger: .03, ease: 'expo.out' }, .7)
+      .fromTo([B.sub, B.note, B.ext].filter(Boolean), { y: 26 * dir, opacity: 0 }, { y: 0, opacity: 1, duration: 1 * d, stagger: .08, ease: 'expo.out' }, .9);
+    cur = n;
+  }
+
+  /* ---------- intro ---------- */
+  function intro() {
+    const L = $('.loader'), cnt = $('.loader__count span');
+    const P = partsOf(slides[0]);
+    slides[0].classList.add('is-active');
+    gsap.set(P.chars, { yPercent: 112, rotate: 5 });
+    gsap.set([P.sub, P.note, '.pager', '.idx', '.top', '.strip'], { opacity: 0 });
+    gsap.set(P.vis, { clipPath: 'inset(100% 0 0 0)' });
+    gsap.set(P.visIn, { yPercent: 22, scale: 1.2 });
+    gsap.set(P.ghost, { xPercent: 12, opacity: 0 });
+
+    const assets = [document.fonts ? document.fonts.ready : Promise.resolve(),
+      ...['assets/img/me-2.webp'].map(src => new Promise(r => { const i = new Image(); i.onload = i.onerror = r; i.src = src; }))];
+    const c = { v: 0 };
+    let loaded = false;
+    Promise.all(assets).then(() => loaded = true);
+    setTimeout(() => loaded = true, 4000);
+
+    const tl = gsap.timeline();
+    tl.from('.loader .ch', { yPercent: 110, duration: 1, stagger: .06, ease: 'expo.out' })
+      .to(c, { v: 86, duration: 1.1, ease: 'power2.inOut', onUpdate: () => { cnt.textContent = Math.round(c.v); gsap.set('.loader__bar i', { scaleX: c.v / 100 }); } }, 0)
+      .add(() => {
+        tl.pause();
+        const finish = () => gsap.to(c, { v: 100, duration: .45, ease: 'power2.out', onUpdate: () => { cnt.textContent = Math.round(c.v); gsap.set('.loader__bar i', { scaleX: c.v / 100 }); }, onComplete: () => tl.resume() });
+        (function wait() { loaded ? finish() : setTimeout(wait, 60); })();
+      })
+      .to('.loader .ch', { yPercent: -110, duration: .7, ease: 'expo.in' }, '+=.1')
+      .to(['.loader__count', '.loader__bar'], { opacity: 0, duration: .4 }, '<')
+      .to(L, { clipPath: 'inset(0 0 100% 0)', duration: 1.1, ease: 'expo.inOut' }, '-=.15')
+      .set(L, { display: 'none' })
+      .to(P.vis, { clipPath: 'inset(0% 0 0% 0)', duration: 1.4, ease: 'expo.inOut' }, '-=1.0')
+      .to(P.visIn, { yPercent: 0, scale: 1, duration: 1.8, ease: 'expo.inOut' }, '<')
+      .to(P.ghost, { xPercent: 0, opacity: 1, duration: 2, ease: 'expo.out' }, '-=1.1')
+      .to(P.chars, { yPercent: 0, rotate: 0, duration: 1.2, stagger: .035, ease: 'expo.out' }, '-=1.9')
+      .to([P.sub, P.note], { opacity: 1, y: 0, duration: 1, stagger: .1 }, '-=.9')
+      .fromTo('.strip', { yPercent: 100, opacity: 1 }, { yPercent: 0, duration: 1.2, ease: 'expo.inOut' }, '-=1.6')
+      .fromTo('.thumb', { y: 30, opacity: 0 }, { y: 0, opacity: (i) => i === 0 ? 1 : (mobile() ? .45 : .55), duration: 1, stagger: .07, clearProps: 'opacity' }, '-=.7')
+      .to(['.top', '.pager', '.idx'], { opacity: 1, duration: 1 }, '-=1')
+      .add(() => onEnter(0), '-=1.2');
+  }
+
+  /* ---------- input ---------- */
+  let wheelLock = 0, acc = 0, accT;
+  addEventListener('wheel', e => {
+    if (panelOpen) return;
+    e.preventDefault();
+    const now = Date.now();
+    clearTimeout(accT); accT = setTimeout(() => acc = 0, 180);
+    if (busy || now < wheelLock) return;
+    acc += Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+    if (Math.abs(acc) > 40) { go(cur + (acc > 0 ? 1 : -1)); acc = 0; wheelLock = now + 1300; }
+  }, { passive: false });
+
+  let tx = 0, ty = 0;
+  addEventListener('touchstart', e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
+  addEventListener('touchend', e => {
+    if (panelOpen) return;
+    const dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+    if (e.target.closest('.thumbs') && Math.abs(dx) > Math.abs(dy)) return;
+    const d = Math.abs(dx) > Math.abs(dy) ? dx : dy;
+    if (Math.abs(d) > 50) go(cur + (d < 0 ? 1 : -1));
+  }, { passive: true });
+
+  addEventListener('keydown', e => {
+    if (e.key === 'Escape' && panelOpen) return closePanel();
+    if (panelOpen) return;
+    if (['ArrowDown', 'ArrowRight', 'PageDown'].includes(e.key)) { e.preventDefault(); go(cur + 1); }
+    if (['ArrowUp', 'ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); go(cur - 1); }
+    if (e.key === 'Enter' && e.target === document.body && (cur === 1 || cur === 2)) openPanel(caseOf(cur));
+  });
+
+  prevB.addEventListener('click', () => go(cur - 1));
+  nextB.addEventListener('click', () => go(cur + 1));
+  $$('[data-go]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); if (panelOpen) closePanel(() => go(+b.dataset.go)); else go(+b.dataset.go); }));
+
+  $('.lang').addEventListener('click', () => {
+    lang = lang === 'en' ? 'ru' : 'en';
+    store.set('nk-lang', lang);
+    const u = new URL(location.href); u.searchParams.set('lang', lang); history.replaceState(null, '', u);
+    const s = slides[cur];
+    gsap.to($$('.title .ch, .sub, .note, .ghost__in', s), { opacity: 0, duration: .25, onComplete: () => {
+      applyLang();
+      gsap.set($$('.sub, .note, .ghost__in', s), { opacity: 1 });
+      gsap.fromTo($$('.title .ch', s), { yPercent: 112 }, { yPercent: 0, duration: 1, stagger: .03 });
+      gsap.fromTo($$('.sub, .note, .ghost__in', s), { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 1, stagger: .06 });
+    } });
+    gsap.fromTo('.lang b', { yPercent: 100 }, { yPercent: 0, duration: .7, delay: .25 });
+  });
+
+  /* sound on the arbicut reel */
+  const soundBtn = $('.reel-sound');
+  function toggleSound(v, btn) {
+    v.muted = !v.muted;
+    if (!v.muted) v.play().catch(() => {});
+    if (btn) gsap.to($('.wave', btn), { opacity: v.muted ? .25 : 1, duration: .3 });
+  }
+
+  /* reels carousel: tap a side reel and it glides to the centre */
+  const N = reelEls.length;
+  const rel = i => { let d = i - reelCur; if (d > N / 2) d -= N; if (d < -N / 2) d += N; return d; };
+  function layoutReels(instant) {
+    const off = mobile() ? 62 : 74;
+    reelEls.forEach((el, i) => {
+      const d = rel(i), a = Math.abs(d);
+      el.style.zIndex = 5 - a;
+      el.dataset.cursor = d === 0 ? 'Sound' : 'Play';
+      el.style.pointerEvents = a > 1 ? 'none' : '';
+      gsap.to(el, {
+        xPercent: d === 0 ? 0 : Math.sign(d) * (a === 1 ? off : off * 1.55),
+        scale: d === 0 ? 1 : a === 1 ? .78 : .6,
+        opacity: d === 0 ? 1 : a === 1 ? .45 : 0,
+        filter: d === 0 ? 'grayscale(0)' : 'grayscale(1)',
+        duration: instant ? 0 : 1.15, ease: 'expo.inOut', overwrite: 'auto'
+      });
+    });
+    $('.reel-count b').textContent = String(reelCur + 1).padStart(2, '0');
+  }
+  let reelBusy = false;
+  function showReel(i) {
+    if (reelBusy || i === reelCur) return;
+    reelBusy = true;
+    const old = activeVideo();
+    reelCur = i;
+    const v = activeVideo();
+    if (v.preload === 'none') v.preload = 'auto';
+    v.currentTime = 0;
+    v.muted = !soundOn;
+    v.play().catch(() => {});
+    gsap.to(old, { opacity: .6, duration: .5, onComplete: () => { old.pause(); old.muted = true; gsap.set(old, { opacity: 1 }); } });
+    layoutReels();
+    gsap.fromTo('.reel-ui > *', { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: .8, delay: .7, stagger: .06 });
+    setTimeout(() => reelBusy = false, 900);
+  }
+  reelEls.forEach((el, i) => el.addEventListener('click', () => {
+    if (i !== reelCur) return showReel(i);
+    soundOn = !soundOn; activeVideo().muted = !soundOn;
+    if (soundOn) activeVideo().play().catch(() => {});
+    gsap.to($('.wave', soundBtn), { opacity: soundOn ? 1 : .25, duration: .3 });
+  }));
+  soundBtn.addEventListener('click', e => { e.stopPropagation(); reelEls[reelCur].click(); });
+  layoutReels(true);
+  addEventListener('resize', () => layoutReels(true));
+
+  /* ---------- panel ---------- */
+  const panel = $('.panel'), body = $('.panel__body'), curtain = $('.panel__curtain');
+  let panelOpen = false;
+  const caseOf = n => ['me', 'xinz', 'arbicut', 'contact'][n];
+  const crumbs = { xinz: 'nk. / case 01', arbicut: 'nk. / case 02' };
+  let pending = [], vids = [], checkRaf = 0;
+  function check() {
+    checkRaf = 0;
+    const vh = body.clientHeight;
+    pending = pending.filter(el => {
+      if (el.getBoundingClientRect().top > vh * .9) return true;
+      if (el.classList.contains('rv-img')) {
+        gsap.to(el, { clipPath: 'inset(0% 0 0 0)', duration: 1.4, ease: 'expo.inOut' });
+        gsap.to($('.g-item > *', el), { scale: 1, duration: 1.8, ease: 'expo.inOut' });
+      } else gsap.to(el, { y: 0, opacity: 1, duration: 1.3 });
+      return false;
+    });
+    vids.forEach(v => {
+      const r = v.parentNode.getBoundingClientRect(), on = r.bottom > 0 && r.top < vh;
+      if (on && v.paused) { if (!v.src) v.src = v.dataset.src; v.play().catch(() => {}); }
+      if (!on && !v.paused) v.pause();
+    });
+  }
+  body.addEventListener('scroll', () => { if (panelOpen && !checkRaf) checkRaf = requestAnimationFrame(check); }, { passive: true });
+
+  function showCase(key) {
+    $$('.case').forEach(c => c.classList.toggle('is-current', c.dataset.case === key));
+    $('[data-crumb]').textContent = crumbs[key];
+    body.scrollTop = 0;
+    const c = $(`.case[data-case="${key}"]`);
+    gsap.set($$('.rv', c), { y: 60, opacity: 0 });
+    gsap.set($$('.rv-img', c), { clipPath: 'inset(100% 0 0 0)' });
+    gsap.set($$('.rv-img .g-item > *', c), { scale: 1.25 });
+    gsap.set($$('.case__title .ch', c), { yPercent: 112, rotate: 4 });
+    pending = $$('.rv, .rv-img', c);
+    vids = $$('video', c);
+    requestAnimationFrame(check);
+    return c;
+  }
+
+  function openPanel(key) {
+    if (key === 'contact') { window.open('https://t.me/krasikovnikolay', '_blank', 'noopener'); return; }
+    if (panelOpen || busy) return;
+    panelOpen = true; busy = true;
+    activeVideo().pause(); cycleTabs(false);
+    panel.classList.add('is-open');
+    const c = showCase(key);
+    gsap.timeline({ onComplete: () => { busy = false; } })
+      .fromTo(curtain, { clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0% 0 0 0)', duration: .9, ease: 'expo.inOut' })
+      .fromTo(body, { clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0% 0 0 0)', duration: 1, ease: 'expo.inOut' }, .18)
+      .to($$('.case__title .ch', c), { yPercent: 0, rotate: 0, duration: 1.2, stagger: .04 }, .75)
+      .from('.panel__bar', { opacity: 0, duration: .8 }, .9);
+    smooth.start();
+  }
+
+  function closePanel(after) {
+    if (!panelOpen) return;
+    busy = true;
+    $$('.case video').forEach(v => v.pause());
+    gsap.timeline({ onComplete: () => {
+      panel.classList.remove('is-open'); panelOpen = false; busy = false; smooth.stop();
+      onEnter(cur); typeof after === 'function' && after();
+    } })
+      .to(body, { clipPath: 'inset(0 0 100% 0)', duration: .95, ease: 'expo.inOut' })
+      .to(curtain, { clipPath: 'inset(0 0 100% 0)', duration: .95, ease: 'expo.inOut' }, .12)
+      .add(() => {
+        const P = partsOf(slides[cur]);
+        gsap.fromTo(P.visIn, { scale: 1.12, yPercent: 8 }, { scale: 1, yPercent: 0, duration: 1.4, ease: 'expo.out' });
+        gsap.fromTo(P.chars, { yPercent: 112 }, { yPercent: 0, duration: 1.1, stagger: .03 });
+      }, .55);
+  }
+
+  function switchCase(key) {
+    if (key === 'contact') { closePanel(() => go(3)); return; }
+    busy = true;
+    gsap.timeline({ onComplete: () => { busy = false; } })
+      .to(body, { clipPath: 'inset(0 0 100% 0)', duration: .8, ease: 'expo.inOut' })
+      .add(() => { const c = showCase(key); gsap.set(body, { clipPath: 'inset(100% 0 0 0)' });
+        gsap.timeline().to(body, { clipPath: 'inset(0% 0 0 0)', duration: .9, ease: 'expo.inOut' })
+          .to($$('.case__title .ch', c), { yPercent: 0, rotate: 0, duration: 1.2, stagger: .04 }, .45);
+        cur = Math.max(cur, 0);
+      });
+  }
+
+  $('.more').addEventListener('click', () => go(cur < slides.length - 1 ? cur + 1 : 0));
+  $$('[data-open]').forEach(el => el.addEventListener('click', () => openPanel(el.dataset.open)));
+  $('.close').addEventListener('click', () => closePanel());
+  $$('[data-case-go]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); switchCase(a.dataset.caseGo); }));
+  $$('.case .g-item').forEach(g => g.addEventListener('click', () => {
+    const v = $('video', g); if (!v) return;
+    $$('.case video').forEach(o => { if (o !== v) o.muted = true; });
+    toggleSound(v);
+  }));
+
+  /* smooth (lerped) scroll inside the panel */
+  const smooth = (() => {
+    let target = 0, pos = 0, raf = 0, on = false;
+    const max = () => body.scrollHeight - body.clientHeight;
+    body.addEventListener('wheel', e => {
+      if (!on || !fine) return;
+      e.preventDefault();
+      target = Math.max(0, Math.min(max(), target + e.deltaY));
+    }, { passive: false });
+    body.addEventListener('scroll', () => { if (!raf) { target = pos = body.scrollTop; } });
+    function tick() {
+      pos += (target - pos) * .09;
+      if (Math.abs(target - pos) < .4) { pos = target; body.scrollTop = pos; raf = 0; return; }
+      body.scrollTop = pos; raf = requestAnimationFrame(tick);
+    }
+    body.addEventListener('wheel', () => { if (on && fine && !raf) raf = requestAnimationFrame(tick); }, { passive: true });
+    return { start() { on = true; target = pos = 0; }, stop() { on = false; cancelAnimationFrame(raf); raf = 0; } };
+  })();
+
+  /* ---------- pointer: parallax, magnetic, cursor ---------- */
+  if (fine && !reduce) {
+    document.body.classList.add('has-cursor');
+    const cursor = $('.cursor'), label = $('.cursor__ring span');
+    const cx = gsap.quickTo(cursor, 'x', { duration: .45, ease: 'power3' });
+    const cy = gsap.quickTo(cursor, 'y', { duration: .45, ease: 'power3' });
+    let mx = innerWidth / 2, my = innerHeight / 2;
+    addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY; cx(mx); cy(my);
+      if (panelOpen) return;
+      const nx = mx / innerWidth - .5, ny = my / innerHeight - .5;
+      const s = slides[cur];
+      gsap.to($('.ghost', s), { x: nx * -60, y: ny * -24, duration: 1.6, ease: 'power3.out', overwrite: 'auto' });
+      gsap.to($('.visual', s), { x: nx * 26, y: ny * 14, duration: 1.4, ease: 'power3.out', overwrite: 'auto' });
+      gsap.to($('.copy', s), { x: nx * -10, y: ny * -6, duration: 1.6, ease: 'power3.out', overwrite: 'auto' });
+      const ai = $('.arch__frame img', s);
+      if (ai) gsap.to(ai, { x: nx * -22, y: ny * -12, duration: 1.6, ease: 'power3.out', overwrite: 'auto' });
+      const sh = $('.sheets', s), rl = $('.reels', s);
+      if (sh) gsap.to(sh, { rotateY: nx * 10, rotateX: ny * -8, transformPerspective: 1400, duration: 1.4, ease: 'power3.out', overwrite: 'auto' });
+      if (rl) reelEls.forEach((el, i) => gsap.to(el, { x: Math.sign(rel(i)) * nx * 30, duration: 1.4, ease: 'power3.out', overwrite: 'auto' }));
+    });
+    document.addEventListener('mouseover', e => {
+      const t = e.target.closest('[data-cursor]');
+      const h = e.target.closest('a, button');
+      cursor.classList.toggle('is-label', !!t);
+      cursor.classList.toggle('is-hover', !t && !!h);
+      if (t) label.textContent = t.dataset.cursor;
+    });
+    document.addEventListener('mouseleave', () => gsap.to(cursor, { opacity: 0, duration: .3 }));
+    document.addEventListener('mouseenter', () => gsap.to(cursor, { opacity: 1, duration: .3 }));
+
+    $$('.magnetic').forEach(m => {
+      const strength = m.classList.contains('orb__btn') ? .35 : .45;
+      m.addEventListener('mousemove', e => {
+        const r = m.getBoundingClientRect();
+        gsap.to(m, { x: (e.clientX - r.left - r.width / 2) * strength, y: (e.clientY - r.top - r.height / 2) * strength, duration: .8, ease: 'power3.out' });
+      });
+      m.addEventListener('mouseleave', () => gsap.to(m, { x: 0, y: 0, duration: 1.1, ease: 'elastic.out(1, .4)' }));
+    });
+
+  }
+
+
+  /* ---------- go ---------- */
+  applyLang();
+  intro();
+  addEventListener('resize', () => gsap.set($$('.visual, .copy, .ghost'), { x: 0, y: 0 }));
+})();
+</script>
+</body>
+</html>
