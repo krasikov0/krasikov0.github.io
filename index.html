@@ -269,9 +269,13 @@ body.has-cursor .cursor{display:block}
   .idx,.idx.is-2l{top:96px}
   .visual{left:0;top:calc(118px + 13.4vw * 1.6)}
   .slide--me .visual{top:calc(118px + 13.4vw * 2.3)}
-  .arch{right:50%;translate:50% 0;height:auto;width:min(84vw,calc((100% - 24px) * .76))}
+  .visual{container-type:size}
+  .arch{right:50%;translate:50% 0;height:auto;width:min(80cqw,calc((100cqh - 34px) * .76))}
   .arch__cap{display:none}
-  .sheets{height:auto;width:72%;top:46%}
+  .sheets{height:auto;width:min(76cqw,calc((100cqh - 64px) * 1210 / 1309));top:calc(50% - 16px)}
+  .slide--xinz .visual{top:calc(118px + 13.4vw * 1.6 + 58px)}
+  .slide--xinz .meta .ext{position:static;margin-top:14px;padding:.35rem .35rem .35rem 1rem;font-size:12px}
+  .slide--xinz .meta .ext i{width:24px;height:24px}
   .sheet-tag{bottom:-2rem}
   .sheet-tag > span:last-child{display:none}
   .reels{height:72%;top:47%}
@@ -345,7 +349,7 @@ body.has-cursor .cursor{display:block}
   </section>
 
   <!-- 02 — xinz -->
-  <section class="slide" data-bg="assets/img/xinz-2.webp">
+  <section class="slide slide--xinz" data-bg="assets/img/xinz-2.webp">
     <div class="ghost" aria-hidden="true"><span class="ghost__in">Xinz</span></div>
     <div class="visual"><div class="visual__in">
       <div class="sheets" data-cursor="Open" data-open="xinz">
